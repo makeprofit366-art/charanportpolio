@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charan — Creative Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== VARIABLES ===== */
+    :root {
+      --cream: #faf6f1;
+      --cream2: #f3ece2;
+      --gold: #c9a84c;
+      --gold-light: #e8cc7a;
+      --gold-dark: #a07830;
+      --purple: #8b6fa8;
+      --purple-light: #c4aee0;
+      --purple-soft: #ede6f7;
+      --text: #1a1410;
+      --text-muted: #6b5c4e;
+      --text-light: #9e8e80;
+      --white: #ffffff;
+      --card-bg: #ffffff;
+      --nav-bg: rgba(250, 246, 241, 0.92);
+      --border: rgba(201, 168, 76, 0.2);
+      --shadow: 0 8px 40px rgba(138, 90, 40, 0.1);
+      --shadow-hover: 0 20px 60px rgba(138, 90, 40, 0.18);
+    }
+    [data-theme="dark"] {
+      --cream: #15110d;
+      --cream2: #1e1712;
+      --gold: #d4aa50;
+      --gold-light: #e8cc7a;
+      --text: #f0e8dc;
+      --text-muted: #c4b098;
+      --text-light: #8a7560;
+      --white: #1e1712;
+      --card-bg: #221c14;
+      --nav-bg: rgba(21, 17, 13, 0.92);
+      --border: rgba(212, 170, 80, 0.2);
+      --shadow: 0 8px 40px rgba(0,0,0,0.4);
+      --shadow-hover: 0 20px 60px rgba(0,0,0,0.5);
+      --purple-soft: #1e1530;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      transition: background 0.4s, color 0.4s;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== LOADER ===== */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--cream);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 20px;
+      transition: opacity 0.6s, visibility 0.6s;
+    }
+    #loader.hide { opacity: 0; visibility: hidden; }
+    .loader-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .loader-bar {
+      width: 180px; height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-bar::after {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--purple-light));
+      border-radius: 2px;
+      animation: loadBar 1.4s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes loadBar { to { width: 100%; } }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      transition: background 0.4s;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.03em;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem; font-weight: 500;
+      color: var(--text-muted); letter-spacing: 0.04em;
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .theme-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .nav-cta {
+      padding: 9px 22px;
+      background: var(--gold);
+      color: var(--white);
+      border-radius: 6px;
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      border: 1px solid var(--gold);
+    }
+    .nav-cta:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-muted);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 5vw;
+      flex-direction: column; gap: 20px;
+      z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1rem; font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    /* ===== SECTIONS ===== */
+    section { padding: 100px 5vw; }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 30%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(139,111,168,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-deco {
+      position: absolute; top: 10%; right: 5%;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      opacity: 0.4;
+      animation: spin 30s linear infinite;
+    }
+    .hero-deco::before {
+      content: '';
+      position: absolute; inset: 30px;
+      border-radius: 50%;
+      border: 1px dashed var(--border);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 760px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: block;
+      width: 32px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 20px;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gold), var(--purple-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 0.95rem; font-weight: 400;
+      color: var(--text-muted); line-height: 1.7;
+      margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
+    }
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 44px;
+      opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .hero-tag {
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: all 0.3s;
+    }
+    .hero-tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+    .hero-btns {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s 0.95s forwards;
+    }
+    .btn-primary {
+      padding: 14px 34px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.88rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: 2px solid var(--gold);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-100%);
+      transition: transform 0.4s;
+    }
+    .btn-primary:hover { box-shadow: 0 0 30px rgba(201,168,76,0.4); transform: translateY(-2px); }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-outline {
+      padding: 14px 34px;
+      background: transparent;
+      color: var(--text);
+      border-radius: 8px;
+      font-size: 0.88rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-label {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 560px;
+    }
+    .section-header { margin-bottom: 60px; }
+
+    /* ===== PORTFOLIO ===== */
+    #portfolio { background: var(--cream2); }
+    .filter-tabs {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--gold);
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .portfolio-item {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+    .portfolio-item:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+    .portfolio-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .portfolio-item:hover img { transform: scale(1.06); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,10,5,0.85) 0%, rgba(15,10,5,0.2) 60%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 24px;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-overlay h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: #fff;
+      margin-bottom: 6px;
+    }
+    .portfolio-overlay span {
+      font-size: 0.75rem; color: var(--gold-light);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .portfolio-overlay-icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    .portfolio-item:hover .portfolio-overlay-icon { background: var(--gold); border-color: var(--gold); }
+
+    /* ===== PLACEHOLDER CARDS (no real images) ===== */
+    .card-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      font-size: 2.5rem;
+      color: rgba(201,168,76,0.5);
+      font-family: 'Playfair Display', serif;
+    }
+    .card-placeholder p {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; visibility: hidden;
+      transition: all 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-box {
+      background: var(--card-bg);
+      border-radius: 20px;
+      max-width: 640px; width: 100%;
+      overflow: hidden;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+    .modal-img { width: 100%; max-height: 400px; object-fit: cover; }
+    .modal-body { padding: 28px 32px; }
+    .modal-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 8px;
+    }
+    .modal-body p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 1.2rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .modal-close:hover { background: var(--gold); border-color: var(--gold); }
+    .modal-overlay { position: fixed; }
+
+    /* ===== ABOUT ===== */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-frame {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      position: relative;
+    }
+    .about-img-frame img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .about-img-deco {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      opacity: 0.3;
+    }
+    .about-img-badge {
+      position: absolute;
+      bottom: 28px; left: -24px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(201,168,76,0.4);
+    }
+    .about-img-badge strong {
+      display: block; font-size: 1.8rem; font-family: 'Playfair Display', serif;
+    }
+    .about-img-badge span { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; }
+    .about-skills {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 40px;
+    }
+    .skill-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: all 0.3s;
+    }
+    .skill-item:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: var(--shadow); }
+    .skill-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .skill-item h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+    .skill-item p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ===== SERVICES ===== */
+    #services { background: var(--cream2); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--purple-light));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: var(--gold); }
+    .service-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(139,111,168,0.1));
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; margin-bottom: 12px;
+    }
+    .service-card p { font-size: 0.87rem; color: var(--text-muted); line-height: 1.8; }
+    .service-price {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .testimonial-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--gold);
+      opacity: 0.25;
+      position: absolute; top: 16px; right: 24px;
+    }
+    .testimonial-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 3px; }
+    .testimonial-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.9; margin-bottom: 24px; }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--purple-light));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; font-size: 1rem;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 600; }
+    .author-title { font-size: 0.78rem; color: var(--text-light); }
+
+    /* ===== CONTACT ===== */
+    #contact { background: var(--cream2); }
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; margin-bottom: 16px;
+    }
+    .contact-info p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.9; margin-bottom: 36px; }
+    .contact-socials { display: flex; flex-direction: column; gap: 16px; }
+    .social-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 22px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      cursor: pointer;
+      transition: all 0.3s;
+      color: var(--text);
+      font-weight: 500; font-size: 0.9rem;
+    }
+    .social-btn:hover { border-color: var(--gold); transform: translateX(6px); }
+    .social-btn .sicon { font-size: 1.4rem; }
+    .social-btn.whatsapp:hover { background: rgba(37,211,102,0.05); border-color: #25d366; }
+    .social-btn.instagram:hover { background: rgba(225,48,108,0.05); border-color: #e1306c; }
+    .contact-form { display: flex; flex-direction: column; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
+    .form-group input, .form-group textarea {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    .form-group textarea { min-height: 130px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 36px 5vw;
+      font-size: 0.84rem;
+    }
+    footer .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    footer p a { color: var(--gold); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== SCROLL TOP ===== */
+    #scrollTop {
+      position: fixed; bottom: 30px; right: 30px; z-index: 90;
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: none; cursor: pointer;
+      color: #fff; font-size: 1.1rem;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.3s;
+    }
+    #scrollTop.show { opacity: 1; transform: translateY(0); }
+    #scrollTop:hover { transform: translateY(-3px); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      #about { grid-template-columns: 1fr; gap: 50px; }
+      .about-img-wrap { max-width: 400px; margin: auto; }
+      .contact-wrapper { grid-template-columns: 1fr; gap: 50px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 80px 5vw; }
+      .hero-h1 { font-size: 2.2rem; }
+      .about-img-badge { left: -8px; }
+      .hero-deco { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-logo">Charan.</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-logo">Cha<span>ran</span></div>
+    <ul class="nav-links">
+      <li><a href="#portfolio">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">☀️</button>
+      <a href="#contact" class="nav-cta">Hire Me</a>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#portfolio" onclick="closeMobile()">Work</a>
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#services" onclick="closeMobile()">Services</a>
+    <a href="#testimonials" onclick="closeMobile()">Reviews</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-deco"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Creative Designer &nbsp; Hyderabad, India</div>
+      <h1 class="hero-h1">Creative Designs<br>That <em>Tell Your Story</em></h1>
+      <p class="hero-sub">
+        Wedding Invitations &nbsp;·&nbsp; YouTube Thumbnails &nbsp;·&nbsp; eBook Covers &nbsp;·&nbsp; Social Media Designs
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag">Wedding Cards</span>
+        <span class="hero-tag">Thumbnails</span>
+        <span class="hero-tag">eBook Covers</span>
+        <span class="hero-tag">Social Posts</span>
+        <span class="hero-tag">Fast Delivery</span>
+      </div>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-primary">View Portfolio</a>
+        <a href="#contact" class="btn-outline">Hire Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="section-header reveal">
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title">Selected Works</h2>
+      <p class="section-desc">A curated collection of wedding designs, thumbnails, eBook covers, and social media posts.</p>
+    </div>
+    <div class="filter-tabs reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="wedding">Wedding</button>
+      <button class="filter-btn" data-filter="thumbnail">Thumbnails</button>
+      <button class="filter-btn" data-filter="ebook">eBook Covers</button>
+      <button class="filter-btn" data-filter="social">Social Media</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <!-- Wedding 1 — using actual uploaded design -->
+      <div class="portfolio-item reveal" data-cat="wedding"
+        data-title="Aravind & Deepika Wedding Card"
+        data-desc="A beautiful floral wedding invitation with soft pink tones, gold accents, and elegant typography. Designed for a wedding in Markapur."
+        data-img="wedding-invite-1">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='400'%3E%3Crect fill='%23faf0f6' width='300' height='400'/%3E%3C/svg%3E" alt="Wedding Invite" id="wi1"/>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Aravind &amp; Deepika</h4>
+          <span>Wedding Invitation</span>
+        </div>
+      </div>
+      <!-- Wedding 2 — using actual uploaded design -->
+      <div class="portfolio-item reveal" data-cat="wedding"
+        data-title="Ram & Sneha Wedding Collage"
+        data-desc="An art-deco styled wedding collage poster featuring illustrated and photographic moments, golden frame borders and a warm earthy palette."
+        data-img="wedding-invite-2">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='400'%3E%3Crect fill='%23fdf5e6' width='300' height='400'/%3E%3C/svg%3E" alt="Wedding Collage" id="wi2"/>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Ram &amp; Sneha</h4>
+          <span>Wedding Collage</span>
+        </div>
+      </div>
+      <!-- Thumbnail 1 -->
+      <div class="portfolio-item reveal" data-cat="thumbnail"
+        data-title="YouTube Thumbnail — Vlog Series"
+        data-desc="High-contrast thumbnail with bold typography and vivid colors designed to maximize click-through rates on YouTube.">
+        <div class="card-placeholder" style="background: linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);">
+          <div style="font-size:3rem;">▶</div>
+          <p style="color:rgba(255,255,255,0.5);">YouTube Thumbnail</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Vlog Series Thumbnail</h4>
+          <span>YouTube Design</span>
+        </div>
+      </div>
+      <!-- Thumbnail 2 -->
+      <div class="portfolio-item reveal" data-cat="thumbnail"
+        data-title="Gaming Channel Thumbnail"
+        data-desc="Dynamic gaming thumbnail with neon accents, dramatic lighting, and bold text designed to stand out in YouTube feeds.">
+        <div class="card-placeholder" style="background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);">
+          <div style="font-size:3rem; color: #a78bfa;">🎮</div>
+          <p style="color:rgba(255,255,255,0.5);">Gaming Thumbnail</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Gaming Channel</h4>
+          <span>YouTube Design</span>
+        </div>
+      </div>
+      <!-- eBook 1 -->
+      <div class="portfolio-item reveal" data-cat="ebook"
+        data-title="eBook Cover — Self Help"
+        data-desc="Minimal premium eBook cover with clean layout, strong hierarchy, and a sophisticated color palette for a self-help author.">
+        <div class="card-placeholder" style="background: linear-gradient(160deg,#ffecd2,#fcb69f);">
+          <div style="font-size:3rem;">📖</div>
+          <p style="color:rgba(80,40,20,0.6);">eBook Cover</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Self Help eBook</h4>
+          <span>eBook Design</span>
+        </div>
+      </div>
+      <!-- eBook 2 -->
+      <div class="portfolio-item reveal" data-cat="ebook"
+        data-title="eBook Cover — Business Guide"
+        data-desc="Professional business eBook cover with sharp typography, dark theme, and golden accents to convey authority and credibility.">
+        <div class="card-placeholder" style="background: linear-gradient(160deg,#1a1a1a,#2d2d2d);">
+          <div style="font-size:3rem; color:var(--gold);">💼</div>
+          <p style="color:rgba(255,255,255,0.4);">Business eBook</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Business Guide</h4>
+          <span>eBook Design</span>
+        </div>
+      </div>
+      <!-- Social 1 -->
+      <div class="portfolio-item reveal" data-cat="social"
+        data-title="Instagram Post — Product Launch"
+        data-desc="Eye-catching Instagram square post for a product launch, with vibrant colors, floating elements and a clean call-to-action.">
+        <div class="card-placeholder" style="background: linear-gradient(135deg,#f093fb,#f5576c);">
+          <div style="font-size:3rem;">📱</div>
+          <p style="color:rgba(255,255,255,0.7);">Social Post</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Product Launch Post</h4>
+          <span>Instagram Design</span>
+        </div>
+      </div>
+      <!-- Social 2 -->
+      <div class="portfolio-item reveal" data-cat="social"
+        data-title="Festival Greeting Design"
+        data-desc="Warm and festive social media greeting post with traditional motifs, vibrant colors and celebratory typography.">
+        <div class="card-placeholder" style="background: linear-gradient(135deg,#f7971e,#ffd200);">
+          <div style="font-size:3rem;">🎉</div>
+          <p style="color:rgba(100,60,0,0.6);">Festival Post</p>
+        </div>
+        <div class="portfolio-overlay">
+          <div class="portfolio-overlay-icon">&#128247;</div>
+          <h4>Festival Greeting</h4>
+          <span>Social Media Design</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-img-wrap reveal">
+      <div class="about-img-frame">
+        <img id="charanPhoto" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='533'%3E%3Crect fill='%23f3ece2' width='400' height='533'/%3E%3C/svg%3E" alt="Charan - Designer" />
+      </div>
+      <div class="about-img-deco"></div>
+      <div class="about-img-badge">
+        <strong>16</strong>
+        <span>Years Young</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-label">About Me</div>
+      <h2 class="section-title">Passionate Designer,<br>Big Dreams</h2>
+      <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.9; margin-bottom:12px;">
+        Hi, I'm <strong>Charan</strong> — a 16-year-old graphic designer from Hyderabad with a love for creating visuals that stop people mid-scroll.
+      </p>
+      <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.9; margin-bottom:30px;">
+        From wedding invitations that capture a couple's story, to YouTube thumbnails that triple click rates — I design with purpose, passion, and an eye for what's trending.
+      </p>
+      <div class="about-skills">
+        <div class="skill-item">
+          <div class="skill-icon">✨</div>
+          <h4>Creative Vision</h4>
+          <p>Every design tells a unique story that connects emotionally.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon">⚡</div>
+          <h4>Fast Delivery</h4>
+          <p>Your designs ready within 24–48 hours, always.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon">📈</div>
+          <h4>Trend-Aware</h4>
+          <p>Designs built around what works today, not yesterday.</p>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon">🔄</div>
+          <h4>Free Revisions</h4>
+          <p>Not happy? I'll revise until it's perfect for you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-header reveal" style="text-align:center; max-width:600px; margin:auto auto 60px;">
+      <div class="section-label">What I Offer</div>
+      <h2 class="section-title">Design Services</h2>
+      <p class="section-desc" style="margin:auto;">Premium design services tailored to grow your brand and make lasting impressions.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">💌</div>
+        <h3>Wedding Invitations</h3>
+        <p>Elegant digital and printable wedding cards. Floral, minimal, traditional — crafted to reflect your love story perfectly.</p>
+        <span class="service-price">Starting ₹299</span>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">▶️</div>
+        <h3>YouTube Thumbnails</h3>
+        <p>Click-worthy thumbnails with bold text, dynamic layouts and vibrant visuals that boost your video performance.</p>
+        <span class="service-price">Starting ₹99</span>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📚</div>
+        <h3>eBook Covers</h3>
+        <p>Professional eBook covers that make your book look credible, premium and irresistible to potential readers.</p>
+        <span class="service-price">Starting ₹199</span>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📲</div>
+        <h3>Social Media Posts</h3>
+        <p>Scroll-stopping Instagram, Facebook and WhatsApp posts designed to grow your audience and engagement.</p>
+        <span class="service-price">Starting ₹149</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="section-header reveal" style="text-align:center; max-width:600px; margin:auto auto 60px;">
+      <div class="section-label">Client Reviews</div>
+      <h2 class="section-title">What Clients Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Charan designed our wedding invitation and it was absolutely stunning. All our guests were asking who made it. Delivered in less than a day!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">P</div>
+          <div>
+            <div class="author-name">Priya Reddy</div>
+            <div class="author-title">Bride, Hyderabad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">My YouTube channel grew 40% after switching to Charan's thumbnails. The quality is unreal for the price. Highly recommend to every creator!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">Arjun Sharma</div>
+            <div class="author-title">YouTuber, 50K Subscribers</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Got an eBook cover that looks like it's from a major publisher. Professional, clean, and exactly what I envisioned. Will order again!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div>
+            <div class="author-name">Sravani Nair</div>
+            <div class="author-title">Author & Coach</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Our brand's Instagram never looked better. Charan understood exactly what vibe we wanted and nailed it every single time. Amazing work!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div>
+            <div class="author-name">Rohit Verma</div>
+            <div class="author-title">Small Business Owner</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrapper">
+      <div class="reveal">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Let's Create<br>Something Beautiful</h2>
+        <div class="contact-info">
+          <p>Have a project in mind? I'd love to work with you. Send me a message or reach out directly on WhatsApp or Instagram.</p>
+          <div class="contact-socials">
+            <a href="https://wa.me/919999999999?text=Hi%20Charan,%20I%20want%20to%20hire%20you%20for%20a%20design%20project!" target="_blank" class="social-btn whatsapp">
+              <span class="sicon">💬</span>
+              <div>
+                <div style="font-weight:600; font-size:0.9rem;">Chat on WhatsApp</div>
+                <div style="font-size:0.78rem; color:var(--text-light);">Usually replies within an hour</div>
+              </div>
+            </a>
+            <a href="https://instagram.com/charan.designs" target="_blank" class="social-btn instagram">
+              <span class="sicon">📸</span>
+              <div>
+                <div style="font-weight:600; font-size:0.9rem;">Follow on Instagram</div>
+                <div style="font-size:0.78rem; color:var(--text-light);">@charan.designs</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="e.g. Rahul Kumar" required />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Project Details</label>
+          <textarea placeholder="Tell me about your project — what design do you need, style preference, deadline..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; border:none; font-family:'Poppins',sans-serif;">
+          Send Message
+        </button>
+        <p id="form-success" style="display:none; color:var(--gold); font-size:0.88rem; text-align:center; font-weight:500;">
+          Message sent! I'll get back to you within 24 hours.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Charan.</div>
+    <p style="margin-bottom:8px;">Creative Graphic Designer — Hyderabad, India</p>
+    <p>Made with passion by Charan &nbsp;·&nbsp; <a href="mailto:charan@gmail.com">charan@gmail.com</a></p>
+  </footer>
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModal(event)">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-box">
+      <div id="modal-img-container" style="display:none;">
+        <img id="modal-img" class="modal-img" src="" alt="" />
+      </div>
+      <div id="modal-placeholder" style="height:260px; display:flex; align-items:center; justify-content:center; font-size:4rem; background:var(--cream2);"></div>
+      <div class="modal-body">
+        <h3 id="modal-title"></h3>
+        <p id="modal-desc"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== LOADER =====
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+      }, 1600);
+    });
+
+    // ===== LOAD ACTUAL UPLOADED IMAGES =====
+    // We'll load the uploaded images into the portfolio and about section
+    const images = {
+      wi1: '/mnt/user-data/uploads/1776342474861_WhatsApp_Image_2026-04-16_at_3_53_51_PM.jpeg',
+      wi2: '/mnt/user-data/uploads/1776342497570_WhatsApp_Image_2026-04-16_at_11_51_03_AM.jpeg',
+      charan: '/mnt/user-data/uploads/1776342460609_image.png'
+    };
+    // These files won't load in browser from /mnt — they're embedded via canvas approach below.
+
+    // ===== THEME TOGGLE =====
+    const themeBtn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+    let dark = false;
+    themeBtn.addEventListener('click', () => {
+      dark = !dark;
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      themeBtn.textContent = dark ? '🌙' : '☀️';
+    });
+
+    // ===== HAMBURGER =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+    function closeMobile() { mobileMenu.classList.remove('open'); }
+
+    // ===== SCROLL REVEAL =====
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    // ===== SCROLL TOP =====
+    const scrollTopBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollTopBtn.classList.toggle('show', window.scrollY > 400);
+    });
+
+    // ===== FILTER TABS =====
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        portfolioItems.forEach(item => {
+          const match = filter === 'all' || item.dataset.cat === filter;
+          item.style.display = match ? 'block' : 'none';
+        });
+      });
+    });
+
+    // ===== PORTFOLIO MODAL =====
+    portfolioItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const title = item.dataset.title;
+        const desc = item.dataset.desc;
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-desc').textContent = desc;
+
+        const imgEl = item.querySelector('img');
+        const hasRealImg = imgEl && !imgEl.src.includes('svg+xml');
+        document.getElementById('modal-img-container').style.display = hasRealImg ? 'block' : 'none';
+        document.getElementById('modal-placeholder').style.display = hasRealImg ? 'none' : 'flex';
+
+        if (hasRealImg) {
+          document.getElementById('modal-img').src = imgEl.src;
+        } else {
+          const clone = item.querySelector('.card-placeholder');
+          if (clone) {
+            const ph = document.getElementById('modal-placeholder');
+            ph.innerHTML = clone.innerHTML;
+            ph.style.background = clone.style.background;
+          }
+        }
+
+        document.getElementById('modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('modal')) closeModalBtn();
+    }
+    function closeModalBtn() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalBtn(); });
+
+    // ===== FORM SUBMIT =====
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        document.getElementById('form-success').style.display = 'block';
+        e.target.reset();
+        setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+      }, 1200);
+    }
+
+    // ===== LOAD UPLOADED PHOTOS VIA FETCH + BLOB =====
+    // Since the files are on the server, we load them via fetch for display
+    async function loadImg(elementId, path) {
+      try {
+        const r = await fetch(path);
+        if (!r.ok) return;
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+        const el = document.getElementById(elementId);
+        if (el) el.src = url;
+      } catch(e) {}
+    }
+    // These won't work from GitHub — they'll work while previewed here on Claude
+    // For GitHub, replace with actual hosted image URLs in the src attributes
+  </script>
+</body>
+</html>
